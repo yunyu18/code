@@ -2,13 +2,13 @@
 #include "dllist.h"
 //#include <iostream>
 
-DLLElement::DLLElement(void *itemPtr, int sortKey)
+DLLElement::DLLElement(void *itemPtr, int sortKey)//列表构造函数
 {
 	//currentThread->Yield();		//error
     item=itemPtr;//这是一个指针，指向的是一个线程
     //currentThread->Yield();		//error
     key=sortKey;
-//    currentThread->Yield();		//5.error
+//    currentThread->Yield();		//5. error
     prev=NULL;
     //currentThread->Yield();		//error
     next=NULL;
@@ -85,7 +85,7 @@ void DLList::Append(void *item)
     }
 }
 
-void *DLList::Remove(int *keyPtr)
+void *DLList::Remove(int *keyPtr)//每次删除第一个节点
 {
     void *RemovedItem;
     if(this->IsEmpty())
@@ -100,13 +100,13 @@ void *DLList::Remove(int *keyPtr)
     	//currentThread->Yield();
         *keyPtr=first->key;
 //        currentThread->Yield();	//4.error item key not match
-        RemovedItem=first->item;
-        //currentThread->Yield();	//error result error
+        RemovedItem=first->item;   //10.删除过程被打断，导致存储信息错乱，打印信息为8号被删除两次
+//        currentThread->Yield();	//error result error
         first=first->next;
         //currentThread->Yield();	//error result error
         if(first==NULL)
         {
-        	//currentThread->Yield();
+//        	currentThread->Yield();  // 7. 没有插入完成就开始删除
             last = NULL;
             //currentThread->Yield();
         }
@@ -120,7 +120,7 @@ void *DLList::Remove(int *keyPtr)
     return RemovedItem;
 }
 
-void DLList::SortedInsert(void *item, int sortKey)
+void DLList::SortedInsert(void *item, int sortKey)//找到合适的位置插入节点
 {
     // 5. 这里被执行了了两次，所以first被更新了两次
     if(this->IsEmpty())
@@ -137,14 +137,14 @@ void DLList::SortedInsert(void *item, int sortKey)
     }
     else
     {
-        //currentThread->Yield();
+//        currentThread->Yield();        //8. 两个线程最后插入的两个节点删除的时候打乱了从小到大的顺序
         DLLElement *temp=new DLLElement(item,sortKey);
         //currentThread->Yield();
         DLLElement *find=first;
         //currentThread->Yield();					//error destroy
         while (find!=NULL&&sortKey>=find->key)
         {
-            //currentThread->Yield();				//error destroy
+//            currentThread->Yield();				//9.第二个线程插入过程被打断，返回时候列表已经被销毁
             find=find->next;
             //currentThread->Yield();				//error destroy
         }

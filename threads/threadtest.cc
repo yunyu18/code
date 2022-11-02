@@ -42,7 +42,7 @@ SimpleThread(int which)
 }
 
 void
-TestDllist(int which)
+TestDllist(int which)//
 {
 	//printf("*** thread %d ***\n",which);
 	InsertList(N,list);
@@ -83,7 +83,7 @@ ThreadTest2()
 {
 	DEBUG('t', "Entering ThreadTest2 ");
 	list=new DLList();
-	for (int var = 0; var < T; var++)
+	for (int var = 0; var < T; var++)//创建线程
 	{
 		char No[4]="1";
 		sprintf(No, "%d", var);
@@ -94,7 +94,7 @@ ThreadTest2()
 		strcat(name,No);
 
 		Thread *t = new Thread(name);
-		t->Fork(TestDllist,var);
+		t->Fork(TestDllist,var);//创建线程
 		//TestDllist(0);
 	}
 
