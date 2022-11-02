@@ -116,6 +116,7 @@ void *DLList::Remove(int *keyPtr)
 
 void DLList::SortedInsert(void *item, int sortKey)
 {
+    // 5. 这里被执行了了两次，所以first被更新了两次
     if(this->IsEmpty())
     {
         DLLElement *temp=new DLLElement(item,sortKey);
