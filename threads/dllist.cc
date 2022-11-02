@@ -23,7 +23,13 @@ DLList::DLList()
 
 DLList::~DLList()
 {
-
+    DLLElement *element=first;
+    while(element!=NULL)
+    {
+        DLLElement *next=element->next;
+        delete element;
+        element=next;
+    }
 }
 
 bool DLList::IsEmpty()
@@ -168,7 +174,7 @@ void DLList::SortedInsert(void *item, int sortKey)
         else
         {
 
-        	currentThread->Yield();				//6. error destroy
+//        	currentThread->Yield();				//6. error destroy
             temp->prev=find->prev;
             //currentThread->Yield();				//error destroy
             find->prev->next=temp;
