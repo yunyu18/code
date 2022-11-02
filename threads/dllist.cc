@@ -1,13 +1,14 @@
 
 #include "dllist.h"
+//#include <iostream>
 
 DLLElement::DLLElement(void *itemPtr, int sortKey)
 {
 	//currentThread->Yield();		//error
-    item=itemPtr;
+    item=itemPtr;//这是一个指针，指向的是一个线程
     //currentThread->Yield();		//error
     key=sortKey;
-    //currentThread->Yield();		//error
+    currentThread->Yield();		//5.error
     prev=NULL;
     //currentThread->Yield();		//error
     next=NULL;
@@ -92,7 +93,7 @@ void *DLList::Remove(int *keyPtr)
     {
     	//currentThread->Yield();
         *keyPtr=first->key;
-        //currentThread->Yield();	//error item key not match
+//        currentThread->Yield();	//4.error item key not match
         RemovedItem=first->item;
         //currentThread->Yield();	//error result error
         first=first->next;
@@ -105,7 +106,7 @@ void *DLList::Remove(int *keyPtr)
         }
         else
         {
-        	//currentThread->Yield();		//error destroy
+        	//currentThread->Yield();		//1.error destroy
             first->prev=NULL;
             //currentThread->Yield();		//error result error
         }
@@ -123,20 +124,20 @@ void DLList::SortedInsert(void *item, int sortKey)
         temp->next=NULL;
         //currentThread->Yield();
         first=temp;
-        //currentThread->Yield();					//error destroy
+        //currentThread->Yield();					//2.error destroy
         last=temp;
         //currentThread->Yield();
     }
     else
     {
-    	//currentThread->Yield();
+        //currentThread->Yield();
         DLLElement *temp=new DLLElement(item,sortKey);
         //currentThread->Yield();
         DLLElement *find=first;
         //currentThread->Yield();					//error destroy
         while (find!=NULL&&sortKey>=find->key)
         {
-        	//currentThread->Yield();				//error destroy
+            //currentThread->Yield();				//error destroy
             find=find->next;
             //currentThread->Yield();				//error destroy
         }
@@ -147,7 +148,7 @@ void DLList::SortedInsert(void *item, int sortKey)
         	//currentThread->Yield();			//error destroy
         	temp->next=NULL;
         	//currentThread->Yield();			//error destroy
-        	last->next=temp;
+            last->next=temp;//2.
         	//currentThread->Yield();      		//error destroy
         	last=temp;
         }
@@ -157,7 +158,7 @@ void DLList::SortedInsert(void *item, int sortKey)
         	temp->prev=NULL;
         	//currentThread->Yield();
         	temp->next=first;
-        	//currentThread->Yield();      		//error destroy
+//        	currentThread->Yield();      		//3.error destroy
         	first->prev=temp;
         	//currentThread->Yield();      		//error destroy
         	first=temp;
@@ -177,6 +178,7 @@ void DLList::SortedInsert(void *item, int sortKey)
             //currentThread->Yield();
         }
     }
+//    printf("last:%d\n",last->key);
 }
 
 void *DLList::SortedRemove(int sortKey)
