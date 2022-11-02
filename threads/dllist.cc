@@ -8,7 +8,7 @@ DLLElement::DLLElement(void *itemPtr, int sortKey)
     item=itemPtr;//这是一个指针，指向的是一个线程
     //currentThread->Yield();		//error
     key=sortKey;
-    currentThread->Yield();		//5.error
+//    currentThread->Yield();		//5.error
     prev=NULL;
     //currentThread->Yield();		//error
     next=NULL;
@@ -168,7 +168,7 @@ void DLList::SortedInsert(void *item, int sortKey)
         else
         {
 
-        	//currentThread->Yield();				//error destroy
+        	currentThread->Yield();				//6. error destroy
             temp->prev=find->prev;
             //currentThread->Yield();				//error destroy
             find->prev->next=temp;
